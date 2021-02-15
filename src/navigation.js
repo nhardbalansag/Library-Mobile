@@ -3,6 +3,7 @@ import React from 'react'
 import LoginScreen from './screens/login';
 import RegisterScreen from './screens/register';
 import AccountScreen from './screens/account';
+import QRScannerScreen from './screens/qrScanner';
 
 import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
@@ -26,6 +27,12 @@ const Homestack = () =>{
         <Stack.Navigator>
             <Stack.Screen name="AccountScreen" component={AccountScreen} options={{ title: 'Account' }}/>
         </Stack.Navigator>
+    )
+}
+
+const Scanner = () =>{
+    return(
+       <QRScannerScreen/>
     )
 }
 
@@ -63,7 +70,7 @@ const Account = () =>{
 
 const NavigationRoute = () =>{
 
-    return Account();
+    return Scanner();
 
 }
 
