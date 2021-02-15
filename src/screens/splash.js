@@ -3,18 +3,30 @@ import {View, Text, Image} from 'react-native';
 
 import {styles} from '../styles/styles';
 
+import { Dimensions } from 'react-native';
+
+import { Avatar } from 'react-native-elements';
+
 const SplashScreen = () =>{
+
+    const windowWidth = Dimensions.get('window').width;
+    const windowHeight = Dimensions.get('window').height;
+
     return(
-        <View>
-            <View style={styles.flex1}>
-                <Image
-                    source={require('../image/LIBRARY HELPDESK APP.png')}
-                    resizeMode={'cover'}
-                    style={{width:"100%", height: 150, paddingHorizontal:10 }} 
-                />
-            </View>
-            <View style={[ styles.justifyCenter, styles.alignCenter] }>
-                <Text style={[styles.splashTitle, styles.textCenter]}>© Copyright 2020-2021 | All Rights Reserved | Powered by Project</Text>
+        <View style={[styles.flex1, styles.justifyCenter, styles.alignCenter]}>
+            <View style={styles.flex2, styles.justifyCenter, styles.alignCenter}>
+                <View>
+                    <Avatar
+                    size="xlarge"
+                    rounded
+                    source={require('../image/Library.png')}
+                    />
+                </View>
+                <View style={[styles.mT10]}>
+                    <Text style={[styles.font20, styles.textBold, styles.pXHalf, styles.textCenter]}>
+                        Eulogio Amang Rodgriquez Institute Vocational High School
+                    </Text>
+                </View>
             </View>
         </View>
     );
