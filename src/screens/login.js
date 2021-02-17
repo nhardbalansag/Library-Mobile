@@ -21,7 +21,7 @@ import { Dimensions } from 'react-native';
 
 import { Avatar } from 'react-native-elements';
 
-import * as Customer from '../redux/user/userActions'; 
+import * as Student from '../redux/user/userActions'; 
 
 import { 
   useDispatch,
@@ -33,8 +33,8 @@ const Login = ({navigation}) =>{
   const windowWidth = Dimensions.get('window').width;
   const windowHeight = Dimensions.get('window').height;
 
-  const [password, setpassword] = useState('helloworld');
-  const [email, setEmail] = useState('admin@email.com');
+  const [password, setpassword] = useState('');
+  const [email, setEmail] = useState('');
 
   const [loadingstate, setloadingstate] = useState(false);
 
@@ -43,7 +43,7 @@ const Login = ({navigation}) =>{
   const login = async () =>{
     setloadingstate(true);
     try {
-        await dispatch(Customer.loginStudent(email, password));
+        await dispatch(Student.loginStudent(email, password));
         setloadingstate(false);
     } catch (error) {
         error.message? alertMessage("login Success") : alertMessage(error.message);

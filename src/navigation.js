@@ -4,11 +4,13 @@ import LoginScreen from './screens/login';
 import RegisterScreen from './screens/register';
 import AccountScreen from './screens/account';
 import QRScannerScreen from './screens/qrScanner';
+import ViewOneScreen from './screens/viewOne';
+import MyBooksScreen from './screens/myBooks';
 
 import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
-import { Icon } from 'react-native-elements'
+import Icon from 'react-native-vector-icons/FontAwesome';
 
 import { 
     useSelector
@@ -29,7 +31,16 @@ const loginRegister = () =>{
 const Homestack = () =>{
     return(
         <Stack.Navigator>
-            <Stack.Screen name="AccountScreen" component={AccountScreen} options={{ title: 'Account' }}/>
+            <Stack.Screen name="AccountScreen" component={AccountScreen} options={{ title: 'Book List' }}/>
+            <Stack.Screen name="ViewOneScreen" component={ViewOneScreen} options={{ title: 'View Book' }}/>
+        </Stack.Navigator>
+    )
+}
+
+const BorrowBook = () =>{
+    return(
+        <Stack.Navigator>
+            <Stack.Screen name="MyBooksScreen" component={MyBooksScreen} options={{ title: 'My Borrowed Books' }}/>
         </Stack.Navigator>
     )
 }
@@ -47,10 +58,12 @@ const Account = () =>{
                 tabBarIcon: ({ focused, color, size }) => {
                     let iconName;
         
-                    if (route.name === 'Homestack') {
-                        iconName = 'home';
-                    } 
-                    return <Icon name={iconName} size={size} color={color} />;
+                    if (route.name === 'AccountScreen') {
+                        iconName = 'book';
+                    }else if(route.name === 'BorrowBook'){
+                        iconName = 'bookmark';
+                    }
+                    return <Icon name={iconName} size={30} color={color} />;
                 },
             })}
             tabBarOptions={{
@@ -67,7 +80,8 @@ const Account = () =>{
                 }
           }}
         >
-            <Tab.Screen name="AccountScreen" component={Homestack} options={{ title: 'Student Account' }}/>
+            <Tab.Screen name="AccountScreen" component={Homestack} options={{ title: 'All Books' }}/>
+            <Tab.Screen name="BorrowBook" component={BorrowBook} options={{ title: 'My Books' }}/>
         </Tab.Navigator>
     )
 }

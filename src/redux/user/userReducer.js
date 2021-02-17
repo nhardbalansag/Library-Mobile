@@ -1,10 +1,14 @@
 
 const initialState = {
     Token:null,
-    UserInfo:null
+    UserInfo:null,
+    BookId:null
 }
 
-import {SET_CREDENTIALS} from './userActions'
+import {
+    SET_CREDENTIALS,
+    VIEW_ONE_BOOK
+} from './userActions'
 
 export default (state =  initialState, action) =>{
     switch(action.type){
@@ -13,6 +17,11 @@ export default (state =  initialState, action) =>{
                 ...state,
                 Token:action.Token,
                 UserInfo:action.UserInfo
+            }
+        case VIEW_ONE_BOOK:
+            return{
+                ...state,
+                BookId:action.bookId
             }
 
     }
