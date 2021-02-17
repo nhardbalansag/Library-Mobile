@@ -1,10 +1,10 @@
 import {APP_LINK} from '../../config'
 
-const SET_CREDENTIALS = 'SET_CREDENTIALS';
+export const SET_CREDENTIALS = 'SET_CREDENTIALS';
 
-export const loginCustomer = (email, password) =>{
+export const loginStudent = (email, password) =>{
     return async (dispatch) =>{
-        const response  = await fetch(APP_LINK + 'login', {
+        const response  = await fetch(APP_LINK + 'login-student', {
             method: 'POST',
             headers:{
                 'Content-type': 'application/json'
@@ -17,10 +17,18 @@ export const loginCustomer = (email, password) =>{
 
         const responseData = await response.json();
 
-        dispatch({
-            type:SET_CREDENTIALS, 
-            Token:responseData.token,
-            UserInfo:responseData.data
-        });
+        if(responseData.status){
+            dispatch({
+                type: SET_CREDENTIALS, 
+                Token: responseData.token,
+                UserInfo: responseData.information
+            });
+
+            throw new Error(true)
+
+        }else{
+
+            throw new Error(false)
+        }
     }
 }
