@@ -26,12 +26,12 @@ const Register = ({navigation}) =>{
     const windowWidth = Dimensions.get('window').width;
     const windowHeight = Dimensions.get('window').height;
   
-    const [first_name, setfirstname] = useState('asdfsf');
-    const [last_name, setlastname] = useState('sfsfsdfsf');
-    const [middle_name, setmiddlename] = useState('sdfsfsdfs');
-    const [id_number, setIdNumber] = useState('sfsfsdffd');
-    const [email, setemail] = useState('nhansag@rmil.com');
-    const [password, setpassword] = useState('helloworld');
+    const [first_name, setfirstname] = useState('');
+    const [last_name, setlastname] = useState('');
+    const [middle_name, setmiddlename] = useState('');
+    const [id_number, setIdNumber] = useState('');
+    const [email, setemail] = useState('');
+    const [password, setpassword] = useState('');
 
     const [loadingstate, setloadingstate] = useState(false);
 

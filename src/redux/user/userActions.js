@@ -1,6 +1,7 @@
 import {APP_LINK} from '../../config'
 
 export const SET_CREDENTIALS = 'SET_CREDENTIALS';
+export const VIEW_ONE_BOOK = 'VIEW_ONE_BOOK';
 
 export const loginStudent = (email, password) =>{
     return async (dispatch) =>{
@@ -30,5 +31,14 @@ export const loginStudent = (email, password) =>{
 
             throw new Error(false)
         }
+    }
+}
+
+export const ViewOneBook = (bookId) =>{
+    return async (dispatch) =>{
+        dispatch({
+            type: VIEW_ONE_BOOK, 
+            bookId: bookId
+        });
     }
 }

@@ -21,6 +21,9 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 
 import * as Student from '../redux/user/userActions'; 
 
+
+import { Container, Header, Content, Card, CardItem, Body, Left, Thumbnail, Button, Right } from "native-base";
+
 import { 
     useDispatch,
     useSelector
@@ -28,7 +31,7 @@ import {
 
 import {APP_LINK} from '../config'
 
-const Account = ({navigation}) =>{
+const MyBooks = ({navigation}) =>{
 
   const dispatch = useDispatch(); 
 
@@ -54,7 +57,7 @@ const Account = ({navigation}) =>{
         setRefreshing(true)
         setLoadmoreBool(true)
         try {
-            const response  = await fetch(APP_LINK + 'view-all-available-books/' + limit, {
+            const response  = await fetch(APP_LINK + 'get-mybook/' + limit, {
                 method:'GET',
                 headers:{
                     'Content-type': 'application/json',
@@ -136,20 +139,57 @@ const Account = ({navigation}) =>{
 
    const renderItem = ({item}) =>{
        return(
-           <TouchableOpacity onPress={() => ViewOneBook(item.id)} style={[{width:"50%", height:300, paddingHorizontal:5, paddingVertical:5}]}>
-               <View style={[styles.bgLight, styles.flexCol, styles.rounded, {paddingHorizontal:5, paddingVertical:10}]}>
-                    <View>
-                        <Image
-                            style={{width:"100%", height: 200}}
-                            resizeMode="contain"
-                            source={{uri: 'http://library-cms.online/storage/' + item.image_path}}
+        <View>
+            <Content padder>
+                <Card>
+                    <CardItem header bordered>
+                        <Text style={[styles.textBold]}>{item.title}</Text>
+                    </CardItem>
+                    <CardItem bordered>
+                        <Body>
+                            <Text>
+                            {item.description}
+                            </Text>
+                        </Body>
+                    </CardItem>
+                    <CardItem footer bordered>
+                        <Text>{item.bookCategoryTitle}</Text>
+                    </CardItem>
+                </Card>
+                <Card>
+                    <CardItem>
+                    <Left>
+                        <Thumbnail source={require('../image/Library.png')} />
+                        <Body>
+                            <Text>Eulogio Amang Rodgriquez Institute Vocational High School</Text>
+                            <Text note>EARIVHS</Text>
+                        </Body>
+                    </Left>
+                    </CardItem>
+                    <CardItem cardBody>
+                        <Image 
+                            resizeMode="contain" 
+                            source={{uri: 'http://library-cms.online/storage/' + item.image_path}} 
+                            style={{height: 200, width: null, flex: 1}}
                         />
-                    </View>
-                    <View style={[styles.mY1]}>
-                        <Text style={[styles.textCenter, styles.textCapitalize, styles.font17]}>{item.title}</Text>
-                    </View>
-               </View>
-           </TouchableOpacity>
+                    </CardItem>
+                    <CardItem>
+                        <Left>
+                            <View style={[styles.flexCol, styles.alignFlexStart]}>
+                                <View style={[styles.flexRow, styles.justifySpaceAround, styles.alignCenter]}>
+                                    <Text style={[styles.textBold]}>STATUS: </Text>
+                                    <Text style={[styles.bgSuccess, styles.textWhite, styles.rounded, {marginLeft:5, padding: 5}]}>{item.borrowStatus}</Text>
+                                </View>
+                                <View style={[styles.flexRow, styles.justifySpaceAround, styles.alignCenter]}>
+                                    <Text style={[styles.textBold]}>Date Borrow: </Text>
+                                    <Text style={[styles.textDark]}>{item.dateBorrowed}</Text>
+                                </View>
+                            </View>
+                        </Left>
+                    </CardItem>
+                </Card>
+            </Content>
+        </View>
        )
    }
 
@@ -159,11 +199,11 @@ const Account = ({navigation}) =>{
                 !Startrefreshing
                 ?
                     <FlatList 
-                        keyExtractor={item => item.id.toString()} 
+                        keyExtractor={item => item.borrowId.toString()} 
                         data={allBooks} 
                         renderItem={renderItem} 
                         ListFooterComponent={loadmore()}
-                        numColumns={2}
+                        numColumns={1}
                         refreshControl={
                             <RefreshControl refreshing={refreshing} onRefresh={refreshPage} />
                         }
@@ -178,4 +218,4 @@ const Account = ({navigation}) =>{
     );
 }
 
-export default Account;
+export default MyBooks;
