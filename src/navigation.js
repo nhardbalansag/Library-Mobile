@@ -10,6 +10,10 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
 import { Icon } from 'react-native-elements'
 
+import { 
+    useSelector
+  } from 'react-redux';
+
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
 
@@ -63,14 +67,20 @@ const Account = () =>{
                 }
           }}
         >
-            <Tab.Screen name="AccountScreen" component={Homestack} options={{ title: 'Account' }}/>
+            <Tab.Screen name="AccountScreen" component={Homestack} options={{ title: 'Student Account' }}/>
         </Tab.Navigator>
     )
 }
 
 const NavigationRoute = () =>{
 
-    return Scanner();
+    const tokenresponse = useSelector(state => state.users.Token);
+
+    if(tokenresponse !== null){
+        return Account();
+    }else{
+        return loginRegister();
+    }
 
 }
 

@@ -1,7 +1,7 @@
 
 const initialState = {
-    Token:[],
-    UserInfo:[]
+    Token:null,
+    UserInfo:null
 }
 
 import {SET_CREDENTIALS} from './userActions'
@@ -11,8 +11,8 @@ export default (state =  initialState, action) =>{
         case SET_CREDENTIALS:
             return{
                 ...state,
-                Token:action.token,
-                UserInfo:action.info
+                Token:action.Token,
+                UserInfo:action.UserInfo
             }
 
     }
