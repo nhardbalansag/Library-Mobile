@@ -136,7 +136,7 @@ const Account = ({navigation}) =>{
 
    const renderItem = ({item}) =>{
        return(
-           <TouchableOpacity onPress={() => ViewOneBook(item.id)} style={[{width:"50%", height:300, paddingHorizontal:5, paddingVertical:5}]}>
+           <TouchableOpacity onPress={() => ViewOneBook(item.id)} style={[styles.mB2, {width:"50%", height:300, paddingHorizontal:5, paddingVertical:5}]}>
                <View style={[styles.bgLight, styles.flexCol, styles.rounded, {paddingHorizontal:5, paddingVertical:10}]}>
                     <View>
                         <Image
@@ -145,8 +145,11 @@ const Account = ({navigation}) =>{
                             source={{uri: 'http://library-cms.online/storage/' + item.image_path}}
                         />
                     </View>
-                    <View style={[styles.mY1]}>
-                        <Text style={[styles.textCenter, styles.textCapitalize, styles.font17]}>{item.title}</Text>
+                    <View style={[styles.mY1, {height:50}]}>
+                        <Text style={[styles.textCenter, styles.textCapitalize, styles.font13]}> 
+                            <Text style={[styles.textBold]}>Title: </Text>
+                            {item.title}
+                        </Text>
                     </View>
                </View>
            </TouchableOpacity>
