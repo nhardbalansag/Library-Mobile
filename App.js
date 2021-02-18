@@ -52,12 +52,13 @@ const App = () =>{
         !load 
         ?
           <>
+            <StatusBar backgroundColor="white" barStyle="dark-content"/>
             <SplashScreen/>
           </>
         :
           <>
             <Provider store={store}>
-              <StatusBar barStyle="dark-content" />
+            <StatusBar backgroundColor="white" barStyle="dark-content"/>
               <NavigationContainer>
                 <NavigationRoute/>
               </NavigationContainer>

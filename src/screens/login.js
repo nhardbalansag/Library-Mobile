@@ -48,7 +48,6 @@ const Login = ({navigation}) =>{
     } catch (error) {
         error.message? alertMessage("login Success") : alertMessage(error.message);
     }
-    
   }
 
   const alertMessage = (message) => {

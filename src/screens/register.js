@@ -1,11 +1,13 @@
-import React, {useState} from 'react'
+import React, {useState, useEffect, useRef} from 'react'
 import {
     View,
     Text,
     TouchableOpacity,
     FlatList,
     ActivityIndicator,
-    Alert
+    Alert,
+    Animated,
+    ScrollView
 } from 'react-native'
 
 import { Input } from 'react-native-elements';
@@ -20,8 +22,21 @@ import {
 import { Dimensions } from 'react-native';
 
 import {APP_LINK} from '../config'
+import { SafeAreaView } from 'react-native';
 
 const Register = ({navigation}) =>{
+
+    const fadeAnim  = useRef(new Animated.Value(0)).current;
+
+    useEffect(() => {
+        Animated.timing(
+          fadeAnim,
+          {
+            useNativeDriver: true // Add This line
+          }
+        ).start();
+      }, [fadeAnim])
+    
 
     const windowWidth = Dimensions.get('window').width;
     const windowHeight = Dimensions.get('window').height;
@@ -34,6 +49,7 @@ const Register = ({navigation}) =>{
     const [password, setpassword] = useState('');
 
     const [loadingstate, setloadingstate] = useState(false);
+
 
     const registerStudent = async () => {
         setloadingstate(true)
@@ -76,6 +92,7 @@ const Register = ({navigation}) =>{
             message? [ { text: "OKAY"}] : [ { text: "OKAY", onPress: () => setloadingstate(false)}]
         );
     }
+    
 
     const registerInput = () =>{
         return(
@@ -140,9 +157,12 @@ const Register = ({navigation}) =>{
     }
 
     return(
-        <FlatList 
-            ListHeaderComponent={registerInput}
-        />
+        <SafeAreaView>
+            <ScrollView>
+                {registerInput()}
+            </ScrollView>
+        </SafeAreaView>
+       
     )
 }
 

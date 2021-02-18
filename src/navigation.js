@@ -10,6 +10,8 @@ import MyBooksScreen from './screens/myBooks';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
+import {styles, colors} from './styles/styles'
+
 import Icon from 'react-native-vector-icons/FontAwesome';
 
 import { 
@@ -31,7 +33,7 @@ const loginRegister = () =>{
 const Homestack = () =>{
     return(
         <Stack.Navigator>
-            <Stack.Screen name="AccountScreen" component={AccountScreen} options={{ title: 'Book List' }}/>
+            <Stack.Screen name="AccountScreen" component={AccountScreen} options={{ title: 'Available Books' }}/>
             <Stack.Screen name="ViewOneScreen" component={ViewOneScreen} options={{ title: 'View Book' }}/>
         </Stack.Navigator>
     )
@@ -68,7 +70,7 @@ const Account = () =>{
             })}
             tabBarOptions={{
                 showIcon: true ,
-                activeTintColor: 'blue',
+                activeTintColor: colors.primaryColor,
                 inactiveTintColor: 'gray',
                 labelStyle: {
                     fontSize: 13,
@@ -80,7 +82,7 @@ const Account = () =>{
                 }
           }}
         >
-            <Tab.Screen name="AccountScreen" component={Homestack} options={{ title: 'All Books' }}/>
+            <Tab.Screen name="AccountScreen" component={Homestack} options={{ title: 'Books' }}/>
             <Tab.Screen name="BorrowBook" component={BorrowBook} options={{ title: 'My Books' }}/>
         </Tab.Navigator>
     )
