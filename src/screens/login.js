@@ -12,6 +12,7 @@ import { Input } from 'react-native-elements';
 
 import PasswordInputText from 'react-native-hide-show-password-input';
 
+
 import {
   styles, 
   colors
@@ -33,8 +34,8 @@ const Login = ({navigation}) =>{
   const windowWidth = Dimensions.get('window').width;
   const windowHeight = Dimensions.get('window').height;
 
-  const [password, setpassword] = useState('');
-  const [email, setEmail] = useState('');
+  const [password, setpassword] = useState('helloworld');
+  const [email, setEmail] = useState('nhardbalansag@gmail.com');
 
   const [loadingstate, setloadingstate] = useState(false);
 
@@ -46,7 +47,7 @@ const Login = ({navigation}) =>{
         await dispatch(Student.loginStudent(email, password));
         setloadingstate(false);
     } catch (error) {
-        error.message? alertMessage("login Success") : alertMessage(error.message);
+        error.message == 'true' ? alertMessage("login Success") : alertMessage(error.message);
     }
   }
 

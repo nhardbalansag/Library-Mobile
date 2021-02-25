@@ -19,6 +19,8 @@ import { Dimensions } from 'react-native';
 
 import Icon from 'react-native-vector-icons/FontAwesome';
 
+import { SearchBar } from 'react-native-elements';
+
 import * as Student from '../redux/user/userActions'; 
 
 import { 
@@ -45,10 +47,41 @@ const Account = ({navigation}) =>{
   const [limit, setLimit] = useState(10);
   const [count, setCount] = useState();
   const [total, setTotal] = useState();
+  const [filterList, setfilterList] = useState();
 
    useEffect(() => {
-    viewAllBooks(limit)
-}, [limit]); 
+        viewAllBooks(limit)
+    }, [limit]); 
+
+    const searchProducts = async (limit) =>{
+        setRefreshing(true)
+        try {
+                const response = await fetch(APP_LINK + 'search-books/'+ limit +'/' + filterList, {
+                method:'GET',
+                headers:{
+                    'Content-type': 'application/json',
+                    'Authorization': 'Bearer ' + tokenresponse
+                }
+            });
+            const responseData = await response.json();
+            setallBooks(responseData.data)
+            setCount(responseData.to)
+            setTotal(responseData.total)
+
+        } catch (error) {
+            ErrorMessage(error.message);
+        }
+
+        setStartRefreshing(false)
+        setRefreshing(false)
+        setStartRefreshing(false)
+        setLoadmoreBool(false)
+    }
+
+    const setSearchvalue = (text) =>{
+        setfilterList(text)
+        searchProducts(limit)
+    }
 
     const viewAllBooks = async (limit) => {
         setRefreshing(true)
@@ -132,6 +165,52 @@ const Account = ({navigation}) =>{
                     <></>
         )
     }
+
+    const searchBarComponent = () =>{
+        return(
+            <View style={[styles.mY1, {paddingHorizontal:5}]}>
+                <SearchBar
+                    backgroundColor="white"
+                    placeholder="Search here"
+                    onChangeText={(text) => setSearchvalue(text)}
+                    value={filterList ? filterList : "Search Here"}
+                    platform="ios"
+                />
+            </View>
+        )
+    }
+
+    const loadPage = () =>{
+        return(
+            <View style={[styles.flexRow, styles.alignCenter, styles.justifyCenter, {marginVertical:20}]}>
+                <TouchableOpacity 
+                    onPress={() =>  viewAllBooks(limit)}
+                    style={[{
+                        backgroundColor:colors.primaryColor,
+                        paddingVertical:10,
+                        paddingHorizontal:10,
+                        borderRadius:10
+                    }]}>
+                    <View style={[{flexDirection:'row', justifyContent:'center', alignItems:'center'}]}>
+                        <Text
+                            style={[{
+                                color:'white',
+                                fontSize:15,
+                                marginRight:5
+                            }]}
+                        >
+                            Refresh
+                        </Text>
+                        {
+                            !loadMoreBool 
+                            ? <Icon name="spinner" size={20} color={colors.lightColor} />
+                            : <Text> <ActivityIndicator size="small" color={colors.lightColor}/> </Text>
+                        }
+                    </View>
+                </TouchableOpacity>
+            </View>
+        )
+   }
     
 
    const renderItem = ({item}) =>{
@@ -160,17 +239,30 @@ const Account = ({navigation}) =>{
         <SafeAreaView>
             {
                 !Startrefreshing
-                ?
-                    <FlatList 
-                        keyExtractor={item => item.id.toString()} 
-                        data={allBooks} 
-                        renderItem={renderItem} 
-                        ListFooterComponent={loadmore()}
-                        numColumns={2}
-                        refreshControl={
-                            <RefreshControl refreshing={refreshing} onRefresh={refreshPage} />
+                ?   
+                    <>
+                        {
+                            count ?
+                                <>
+                                    <FlatList 
+                                        keyExtractor={item => item.id.toString()} 
+                                        data={allBooks} 
+                                        renderItem={renderItem} 
+                                        ListHeaderComponent={searchBarComponent()}
+                                        ListFooterComponent={loadmore()}
+                                        numColumns={2}
+                                        refreshControl={
+                                            <RefreshControl refreshing={refreshing} onRefresh={refreshPage} />
+                                        }
+                                    />
+                                </>
+                            :
+                                <>
+                                    {loadPage()}
+                                </>
                         }
-                    />
+                        
+                    </>
                 :
                     <>
                         <ActivityIndicator style={[styles.mT10]} size="large" color={colors.primaryColor}/> 
