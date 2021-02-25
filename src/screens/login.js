@@ -34,8 +34,8 @@ const Login = ({navigation}) =>{
   const windowWidth = Dimensions.get('window').width;
   const windowHeight = Dimensions.get('window').height;
 
-  const [password, setpassword] = useState('helloworld');
-  const [email, setEmail] = useState('nhardbalansag@gmail.com');
+  const [password, setpassword] = useState('');
+  const [email, setEmail] = useState('');
 
   const [loadingstate, setloadingstate] = useState(false);
 
