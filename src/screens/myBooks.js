@@ -21,6 +21,7 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 
 import * as Student from '../redux/user/userActions'; 
 
+import { Rating, AirbnbRating } from 'react-native-elements';
 
 import { Container, Header, Content, Card, CardItem, Body, Left, Thumbnail, Button, Right } from "native-base";
 
@@ -78,13 +79,29 @@ const MyBooks = ({navigation}) =>{
         setLoadmoreBool(false)
     }
 
-    const ViewOneBook = async (BookId) =>{
+    const rateBook = async (borrrowId, bookId) => {
+        setRefreshing(true)
         try {
-            await dispatch(Student.ViewOneBook(BookId));
-            navigation.navigate('ViewOneScreen')
+            const response  = await fetch(APP_LINK + 'ratings/rate-books', {
+                method:'POST',
+                headers:{
+                    'Content-type': 'application/json',
+                    'Authorization': 'Bearer ' + tokenresponse
+                },
+                body: JSON.stringify({
+                    borrrowId, 
+                    bookId
+                })
+            }); 
+
+            const responseData = await response.json();
+
+            ErrorMessage(responseData);
+
         } catch (error) {
-            ErrorMessage(error.message);
+            ErrorMessage(error.message)
         }
+        setRefreshing(false)
     }
 
     const ErrorMessage = (message) => {
@@ -135,7 +152,6 @@ const MyBooks = ({navigation}) =>{
                     <></>
         )
     }
-    
 
    const renderItem = ({item}) =>{
        return(
@@ -147,13 +163,22 @@ const MyBooks = ({navigation}) =>{
                     </CardItem>
                     <CardItem bordered>
                         <Body>
-                            <Text>
-                            {item.description}
-                            </Text>
+                            <View>
+                                <Text>
+                                    {item.description}
+                                </Text>
+                                <Text>{item.bookCategoryTitle}</Text>
+                            </View>
                         </Body>
                     </CardItem>
                     <CardItem footer bordered>
-                        <Text>{item.bookCategoryTitle}</Text>
+                        <AirbnbRating
+                            count={4}
+                            reviews={["Terrible", "Good", "Satisfied", "Great"]}
+                            defaultRating={4}
+                            size={30}
+                            onFinishRating={(text) => rateBook(item.borrowId, item.id)}
+                        />
                     </CardItem>
                 </Card>
                 <Card>
@@ -178,11 +203,17 @@ const MyBooks = ({navigation}) =>{
                             <View style={[styles.flexCol, styles.alignFlexStart]}>
                                 <View style={[styles.flexRow, styles.justifySpaceAround, styles.alignCenter]}>
                                     <Text style={[styles.textBold]}>STATUS: </Text>
-                                    <Text style={[styles.bgSuccess, styles.textWhite, styles.rounded, {marginLeft:5, padding: 5}]}>{item.borrowStatus}</Text>
+                                    <Text style={[item.borrowStatus == 'borrowed' ? styles.bgSuccess : (item.borrowStatus == 'pending' ? styles.bgWarning : styles.bgDanger), styles.textWhite, styles.rounded, {marginLeft:5, padding: 5}]}>{item.borrowStatus}</Text>
                                 </View>
-                                <View style={[styles.flexRow, styles.justifySpaceAround, styles.alignCenter]}>
-                                    <Text style={[styles.textBold]}>Date Borrow: </Text>
-                                    <Text style={[styles.textDark]}>{item.dateBorrowed}</Text>
+                                <View style={[styles.flexCol]}>
+                                    <View style={[styles.flexRow, styles.justifySpaceAround, styles.alignCenter]}>
+                                        <Text style={[styles.textBold]}>Date Borrow: </Text>
+                                        <Text style={[styles.textDark]}>{item.dateBorrowed}</Text>
+                                    </View>
+                                    <View style={[styles.flexRow, styles.justifySpaceAround, styles.alignCenter]}>
+                                        <Text style={[styles.textBold]}>Date to Return: </Text>
+                                        <Text style={[styles.textDark]}>{item.dateReturned}</Text>
+                                    </View>
                                 </View>
                             </View>
                         </Left>
@@ -193,21 +224,63 @@ const MyBooks = ({navigation}) =>{
        )
    }
 
+   const loadPage = () =>{
+        return(
+            <View style={[styles.flexRow, styles.alignCenter, styles.justifyCenter, {marginVertical:20}]}>
+                <TouchableOpacity 
+                    onPress={() =>  viewAllBooks(limit)}
+                    style={[{
+                        backgroundColor:colors.primaryColor,
+                        paddingVertical:10,
+                        paddingHorizontal:10,
+                        borderRadius:10
+                    }]}>
+                    <View style={[{flexDirection:'row', justifyContent:'center', alignItems:'center'}]}>
+                        <Text
+                            style={[{
+                                color:'white',
+                                fontSize:15,
+                                marginRight:5
+                            }]}
+                        >
+                            Refresh
+                        </Text>
+                        {
+                            !loadMoreBool 
+                            ? <Icon name="spinner" size={20} color={colors.lightColor} />
+                            : <Text> <ActivityIndicator size="small" color={colors.lightColor}/> </Text>
+                        }
+                    </View>
+                </TouchableOpacity>
+            </View>
+        )
+   }
+
     return(
         <SafeAreaView>
             {
                 !Startrefreshing
                 ?
-                    <FlatList 
-                        keyExtractor={item => item.borrowId.toString()} 
-                        data={allBooks} 
-                        renderItem={renderItem} 
-                        ListFooterComponent={loadmore()}
-                        numColumns={1}
-                        refreshControl={
-                            <RefreshControl refreshing={refreshing} onRefresh={refreshPage} />
-                        }
-                    />
+                    <>
+                    {
+                        count ?
+                            <>
+                                <FlatList 
+                                    keyExtractor={item => item.borrowId.toString()} 
+                                    data={allBooks} 
+                                    renderItem={renderItem} 
+                                    ListFooterComponent={loadmore()}
+                                    numColumns={1}
+                                    refreshControl={
+                                        <RefreshControl refreshing={refreshing} onRefresh={refreshPage} />
+                                    }
+                                />
+                            </>
+                        :
+                            loadPage() 
+                    }
+                    </>
+                   
                 :
                     <>
                         <ActivityIndicator style={[styles.mT10]} size="large" color={colors.primaryColor}/> 

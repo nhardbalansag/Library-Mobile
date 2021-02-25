@@ -2,29 +2,35 @@ import React, {useState} from 'react'
 import {
     View,
     Text,
-    TouchableOpacity
+    TouchableOpacity,
+    Dimensions,
+    Alert
 } from 'react-native';
 
-import Icon from 'react-native-vector-icons/FontAwesome';
-import { Input } from 'react-native-elements';
-
-import PasswordInputText from 'react-native-hide-show-password-input';
-
-import {styles} from '../styles/styles'
-
-import { Dimensions } from 'react-native';
-
-import { Avatar } from 'react-native-elements';
+import {  CameraKitCamera  } from 'react-native-camera-kit';
 
 const QRScanner = ({navigation}) =>{
   
-  const windowWidth = Dimensions.get('window').width;
-  const windowHeight = Dimensions.get('window').height;
-
     return(
-        <View style={[styles.bgLight, styles.flex1, styles.justifyCenter, {height:windowHeight}]}>
-            <Text>Account</Text>
-        </View>
+        <CameraKitCamera
+            ref={(cam) => (console.warn(cam))}
+            style={{
+                flex: 1,
+                backgroundColor: 'white',
+            }}
+            cameraOptions={{
+                flashMode: 'auto', // on/off/auto(default)
+                focusMode: 'on', // off/on(default)
+                zoomMode: 'on', // off/on(default)
+                ratioOverlay: '1:1', // optional
+                ratioOverlayColor: '#00000077', // optional
+            }}
+            onReadCode={(
+                event, // optional
+            ) => console.log(event.nativeEvent.codeStringValue)}
+            resetFocusTimeout={0} // optional
+            resetFocusWhenMotionDetected={true} // optional
+        />
     );
 }
 

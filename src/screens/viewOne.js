@@ -19,7 +19,7 @@ import { Dimensions } from 'react-native';
 
 import Icon from 'react-native-vector-icons/FontAwesome';
 
-import { Container, Header, Content, Card, CardItem, Body, Left, Thumbnail, Button, Right } from "native-base";
+import { Container, Center, Content, Card, CardItem, Body, Left, Thumbnail, Button, Right } from "native-base";
 
 import { 
     useSelector
@@ -39,10 +39,30 @@ const ViewOne = ({navigation}) =>{
   const [Startrefreshing, setStartRefreshing] = useState(true);
   const [bookInfo, setbookInfo] = useState();
   const [loadingstate, setloadingstate] = useState(false);
+  const [percentageValue, setpercentageValue] = useState();
 
     useEffect(() => {
         viewAllBooks(bookId)
+        percentage(bookId)
     }, []); 
+
+    
+    const percentage = async (book_id) => {
+        try {
+            const response  = await fetch(APP_LINK + 'ratings/percentage/' + book_id, {
+                headers:{
+                    'Content-type': 'application/json',
+                    'Authorization': 'Bearer ' + tokenresponse
+                }
+            }); 
+
+            const responseData = await response.json();
+            setpercentageValue(responseData)
+
+        } catch (error) {
+            ErrorMessage(error.message)
+        }
+    }
 
     const getBook = async (bookId) =>{
         setloadingstate(true)
@@ -124,6 +144,22 @@ const ViewOne = ({navigation}) =>{
                     </CardItem>
                     <CardItem footer bordered>
                         <Text>{bookInfo.bookCategoryTitle}</Text>
+                    </CardItem>
+                </Card>
+                <Card>
+                    <CardItem header bordered>
+                        <Text style={[styles.textBold]}>Ratings</Text>
+                        
+                    </CardItem>
+                    <CardItem bordered>
+                        <Body>
+                            <View style={[styles.flexRow, styles.justifyCenter, styles.alignCenter]}>
+                                <Text style={[styles.textBold, styles.font30, {color:colors.warningColor}]}>
+                                {percentageValue}%
+                                </Text>
+                                <Icon style={[styles.textBold, styles.font30, {color:colors.warningColor}]} name='star'/>
+                            </View>
+                        </Body>
                     </CardItem>
                 </Card>
                 <Card>
